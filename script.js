@@ -4,6 +4,7 @@ const nextButton = document.getElementById("next-btn");
 const scoreElement = document.getElementById("score");
 const currentElement = document.getElementById("current");
 const timerElement = document.getElementById("timer");
+const resultMessage = document.getElementById("result-message");
 
 let questions = [];
 let currentQuestionIndex = 0;
@@ -73,7 +74,6 @@ function showQuestion() {
     answersElement.appendChild(button);
   });
 
-  // 現在の問題番号を更新
   updateCurrentQuestion();
 
   // タイマー開始（10秒）
@@ -87,6 +87,10 @@ function resetState() {
   while (answersElement.firstChild) {
     answersElement.removeChild(answersElement.firstChild);
   }
+
+  // メッセージを消す
+  resultMessage.textContent = "";
+  resultMessage.className = "";
 }
 
 // タイマー開始
@@ -107,8 +111,7 @@ function startTimer(seconds) {
 
 // 回答処理
 function handleAnswer(selectedAnswer, currentQuestion) {
-  // タイマー停止
-  clearInterval(timer);
+  clearInterval(timer); // タイマーを停止
 
   const isCorrect = currentQuestion.answers.indexOf(selectedAnswer) === currentQuestion.correct;
 
@@ -125,6 +128,9 @@ function handleAnswer(selectedAnswer, currentQuestion) {
   if (isCorrect) {
     score++;
     updateScoreDisplay();
+    showResultMessage(true); // 正解メッセージ表示
+  } else {
+    showResultMessage(false); // 不正解メッセージ表示
   }
 
   nextButton.style.display = "block";
@@ -141,29 +147,25 @@ function handleTimeout() {
     button.disabled = true;
   });
 
+  showResultMessage(false); // 時間切れは「不正解」として扱う
   nextButton.style.display = "block";
 }
 
-// 次の問題へ進む
-nextButton.addEventListener("click", () => {
-  currentQuestionIndex++;
-  if (currentQuestionIndex < questions.length) {
-    showQuestion();
+// 正誤メッセージの表示
+function showResultMessage(isCorrect) {
+  if (isCorrect) {
+    resultMessage.textContent = "正解！";
+    resultMessage.className = "correct";
   } else {
-    showScore();
+    resultMessage.textContent = "不正解！";
+    resultMessage.className = "incorrect";
   }
-});
 
-// 最終スコア表示
-function showScore() {
-  resetState();
-  questionElement.textContent = `最終スコア: ${score} / ${questions.length}`;
-  currentElement.textContent = "クイズ終了！";
-  nextButton.textContent = "もう一度挑戦";
-  nextButton.style.display = "block";
-
-  // 画面を再読み込みしてリセット
-  nextButton.onclick = () => location.reload();
+  // 1秒後にメッセージを消す
+  setTimeout(() => {
+    resultMessage.textContent = "";
+    resultMessage.className = "";
+  }, 1000);
 }
 
 // 初期化

@@ -50,7 +50,7 @@ body {
   
   /* 不正解ボタンのスタイル */
   #answers button.incorrect {
-    background-color: #f44336;
+    background-color: gray;
     color: white;
   }
   
@@ -79,7 +79,7 @@ body {
   /* 「次の問題」ボタンのスタイル */
   #next-btn {
     display: none;
-    background-color: #4caf50;
+    background-color: #fffb00d7;
     color: white;
     padding: 10px;
     cursor: pointer;
@@ -112,5 +112,25 @@ body {
     #next-btn {
       padding: 8px;
     }
+  }
+  
+  #result-message {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    height: 30px; /* サイズ固定 */
+    text-align: center;
+    opacity: 0; /* 初期状態は非表示 */
+    transition: opacity 0.3s ease;
+  }
+  
+  #result-message.correct {
+    color: green;
+    opacity: 1;
+  }
+  
+  #result-message.incorrect {
+    color: blue;
+    opacity: 1;
   }
   
