@@ -43,6 +43,8 @@ function startQuiz() {
   updateCurrentQuestion();
   nextButton.textContent = "次の問題";
   nextButton.style.display = "none";
+  nextButton.removeEventListener("click", goToNextQuestion); // リスナーをクリア
+  nextButton.addEventListener("click", goToNextQuestion); // 新たにリスナーを設定
   showQuestion();
 }
 
@@ -133,7 +135,7 @@ function handleAnswer(selectedAnswer, currentQuestion) {
     showResultMessage(false); // 不正解メッセージ表示
   }
 
-  nextButton.style.display = "block";
+  nextButton.style.display = "block"; // 次のボタンを有効化
 }
 
 // 時間切れ時の処理
@@ -147,8 +149,8 @@ function handleTimeout() {
     button.disabled = true;
   });
 
-  showResultMessage(false); // 時間切れは「不正解」として扱う
-  nextButton.style.display = "block";
+  showResultMessage(false);
+  nextButton.style.display = "block"; // 次のボタンを表示
 }
 
 // 正誤メッセージの表示
@@ -166,6 +168,28 @@ function showResultMessage(isCorrect) {
     resultMessage.textContent = "";
     resultMessage.className = "";
   }, 1000);
+}
+
+// 次の問題に進む
+function goToNextQuestion() {
+  currentQuestionIndex++;
+  if (currentQuestionIndex < questions.length) {
+    showQuestion();
+  } else {
+    showScore();
+  }
+}
+
+// 最終スコア表示
+function showScore() {
+  resetState();
+  questionElement.textContent = `最終スコア: ${score} / ${questions.length}`;
+  currentElement.textContent = "クイズ終了！";
+  nextButton.textContent = "もう一度挑戦";
+  nextButton.style.display = "block";
+
+  // 画面を再読み込みしてリセット
+  nextButton.onclick = () => location.reload();
 }
 
 // 初期化
