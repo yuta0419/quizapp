@@ -182,7 +182,6 @@ function goToNextQuestion() {
 
 // 最終スコア表示
 function showScore() {
-  resetState();
   questionElement.textContent = `最終スコア: ${score} / ${questions.length}`;
   currentElement.textContent = "クイズ終了！";
   nextButton.textContent = "もう一度挑戦";
